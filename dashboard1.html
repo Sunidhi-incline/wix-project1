@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VR/AR Studio — Demo</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-bg: #F5F5F5;   /* background */
+      --secondary-bg: white;   /* sections */
+      --accent: #B22222;       /* buttons / highlights */
+      --text: #111;
+      --nav-bg: rgba(17,17,17,0.8);
+      --footer-bg: #111;
+      --footer-text: white;
+    }
+
+    body {
+      font-family:'Open Sans',sans-serif;
+      background:var(--primary-bg);
+      margin:0;
+      color:var(--text);
+    }
+
+    /* NAV */
+    nav {
+      position:fixed;top:0;left:0;width:100%;
+      padding:18px 30px;
+      display:flex;justify-content:space-between;align-items:center;
+      background:var(--nav-bg);z-index:100;
+    }
+    nav a {
+      color:white;
+      margin:0 12px;text-decoration:none;font-weight:600
+    }
+    .logo {
+      font-family:'Montserrat';
+      color:white;font-weight:700
+    }
+
+    /* HERO */
+    header.hero {
+      position:relative;height:92vh;
+      display:flex;align-items:center;justify-content:center;
+      color:white;text-align:center
+    }
+    header.hero video {
+      position:absolute;top:0;left:0;width:100%;height:100%;
+      object-fit:cover;z-index:-1
+    }
+    header.hero::after {
+      content:"";position:absolute;inset:0;background:rgba(0,0,0,0.45);z-index:-1
+    }
+    .hero-content {z-index:10}
+    .hero-content h1 {font-family:'Montserrat';font-size:3rem}
+    .btn {
+      background:var(--accent);color:white;
+      padding:12px 22px;border:none;border-radius:8px;
+      cursor:pointer;margin-top:12px
+    }
+
+    /* OUR SPACE */
+    section.gallery {
+      padding:60px 20px;
+      background:var(--secondary-bg);
+      transition:background .3s;
+    }
+    section.gallery h2 {
+      text-align:center;
+      font-family:'Montserrat';
+      font-size:2.5rem;
+      margin-bottom:20px
+    }
+    .cards {
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:20px;max-width:1200px;margin:0 auto
+    }
+    .card {
+      box-shadow:0 6px 18px rgba(0,0,0,0.1);
+      border-radius:12px;overflow:hidden
+    }
+    .card img {width:100%;height:240px;object-fit:cover;display:block}
+
+    /* THEME BUTTONS */
+    .theme-switcher {
+      position:fixed;top:100px;right:20px;
+      display:flex;flex-direction:column;gap:10px;
+      z-index:200;
+    }
+    .theme-switcher button {
+      padding:8px 14px;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    /* FOOTER */
+    footer {
+      background:var(--footer-bg);
+      color:var(--footer-text);
+      text-align:center;padding:20px
+    }
+  </style>
+</head>
+<body>
+
+  <!-- THEME SWITCHER -->
+  <div class="theme-switcher">
+    <button onclick="setTheme('greenblack')" style="background:#0f0;color:#111">Green+Black</button>
+    <button onclick="setTheme('blackred')" style="background:#111;color:#B22222">Black+Red</button>
+    <button onclick="setTheme('whitered')" style="background:white;color:#B22222">White+Red</button>
+    <button onclick="setTheme('final')" style="background:#B22222;color:white">Final Theme</button>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">socialpoint.</div>
+    <div>
+      <a href="#home">Home</a>
+      <a href="#space">Our Space</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" id="home">
+    <video autoplay muted loop playsinline>
+      <source src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\WhatsApp Video 2025-10-02 at 18.53.35_3b57b03d.mp4" type="video/mp4">
+    </video>
+    <div class="hero-content">
+      <h1>Immersive AR & Green-Screen Studio</h1>
+      <p>Professional green-screen, AR/VR, and virtual set production with top-notch equipment.</p>
+      <button class="btn">Book a Session</button>
+    </div>
+  </header>
+
+  <!-- OUR SPACE -->
+  <section class="gallery" id="space">
+    <h2>Our Space</h2>
+    <div class="cards">
+      <div class="card"><img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio Image 1"></div>
+      <div class="card"><img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio Image 2"></div>
+      <div class="card"><img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio Image 3"></div>
+      <div class="card"><img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio Image 4"></div>
+      <div class="card"><img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio Image 5"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025 socialpoint. All rights reserved.
+  </footer>
+
+  <script>
+    function setTheme(theme){
+      const root=document.documentElement;
+      if(theme==="greenblack"){
+        root.style.setProperty('--primary-bg','#0f0');
+        root.style.setProperty('--secondary-bg','#111');
+        root.style.setProperty('--accent','#111');
+        root.style.setProperty('--text','white');
+        root.style.setProperty('--nav-bg','#111');
+        root.style.setProperty('--footer-bg','#111');
+        root.style.setProperty('--footer-text','white');
+      }
+      else if(theme==="blackred"){
+        root.style.setProperty('--primary-bg','#111');
+        root.style.setProperty('--secondary-bg','#111');
+        root.style.setProperty('--accent','#B22222');
+        root.style.setProperty('--text','white');
+        root.style.setProperty('--nav-bg','#111');
+        root.style.setProperty('--footer-bg','#111');
+        root.style.setProperty('--footer-text','#B22222');
+      }
+      else if(theme==="whitered"){
+        root.style.setProperty('--primary-bg','#fff');
+        root.style.setProperty('--secondary-bg','#fff');
+        root.style.setProperty('--accent','#B22222');
+        root.style.setProperty('--text','#111');
+        root.style.setProperty('--nav-bg','#B22222');
+        root.style.setProperty('--footer-bg','#B22222');
+        root.style.setProperty('--footer-text','white');
+      }
+      else if(theme==="final"){
+        root.style.setProperty('--primary-bg','#F5F5F5');
+        root.style.setProperty('--secondary-bg','white');
+        root.style.setProperty('--accent','#B22222');
+        root.style.setProperty('--text','#111');
+        root.style.setProperty('--nav-bg','rgba(17,17,17,0.8)');
+        root.style.setProperty('--footer-bg','#111');
+        root.style.setProperty('--footer-text','white');
+      }
+    }
+  </script>
+</body>
+</html>
