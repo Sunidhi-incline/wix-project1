@@ -3,199 +3,879 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>VR/AR Studio — Demo</title>
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-
+  <title>socialpoint - VR/AR Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --primary-bg: #F5F5F5;   /* background */
-      --secondary-bg: white;   /* sections */
-      --accent: #B22222;       /* buttons / highlights */
-      --text: #111;
-      --nav-bg: rgba(17,17,17,0.8);
-      --footer-bg: #111;
-      --footer-text: white;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
     }
-
+    
+    /* Theme Variables */
+    body.theme-default {
+      --bg-primary: #F5F5F5;
+      --bg-secondary: white;
+      --bg-nav: rgba(75, 75, 75, 0.95);
+      --bg-hero-overlay: rgba(0, 0, 0, 0.3);
+      --text-primary: #333;
+      --text-light: white;
+      --accent: #E60000;
+      --accent-dark: #8B0000;
+      --card-shadow: rgba(0, 0, 0, 0.15);
+    }
+    
+    body.theme-green-black {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #1a1a1a;
+      --bg-nav: rgba(0, 0, 0, 0.9);
+      --bg-hero-overlay: rgba(0, 255, 0, 0.2);
+      --text-primary: #00ff00;
+      --text-light: #00ff00;
+      --accent: #00ff00;
+      --accent-dark: #00cc00;
+      --card-shadow: rgba(0, 255, 0, 0.2);
+    }
+    
+    body.theme-red-white {
+      --bg-primary: #ffffff;
+      --bg-secondary: #fff5f5;
+      --bg-nav: rgba(220, 20, 60, 0.95);
+      --bg-hero-overlay: rgba(220, 20, 60, 0.3);
+      --text-primary: #333;
+      --text-light: white;
+      --accent: #DC143C;
+      --accent-dark: #8B0000;
+      --card-shadow: rgba(220, 20, 60, 0.15);
+    }
+    
+    body.theme-red-black {
+      --bg-primary: #0d0d0d;
+      --bg-secondary: #1a0000;
+      --bg-nav: rgba(139, 0, 0, 0.9);
+      --bg-hero-overlay: rgba(139, 0, 0, 0.5);
+      --text-primary: #ff4444;
+      --text-light: #ffcccc;
+      --accent: #ff0000;
+      --accent-dark: #cc0000;
+      --card-shadow: rgba(255, 0, 0, 0.3);
+    }
+    
     body {
-      font-family:'Open Sans',sans-serif;
-      background:var(--primary-bg);
-      margin:0;
-      color:var(--text);
+      font-family: 'Open Sans', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
     }
-
-    /* NAV */
+    
+    /* Navigation */
     nav {
-      position:fixed;top:0;left:0;width:100%;
-      padding:18px 30px;
-      display:flex;justify-content:space-between;align-items:center;
-      background:var(--nav-bg);z-index:100;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-nav);
+      z-index: 1000;
     }
-    nav a {
-      color:white;
-      margin:0 12px;text-decoration:none;font-weight:600
-    }
+    
     .logo {
-      font-family:'Montserrat';
-      color:white;font-weight:700
+      font-family: 'Montserrat';
+      color: var(--text-light);
+      font-weight: 700;
+      font-size: 1.8rem;
     }
-
-    /* HERO */
-    header.hero {
-      position:relative;height:92vh;
-      display:flex;align-items:center;justify-content:center;
-      color:white;text-align:center
+    
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
     }
-    header.hero video {
-      position:absolute;top:0;left:0;width:100%;height:100%;
-      object-fit:cover;z-index:-1
+    
+    .hamburger span {
+      width: 30px;
+      height: 3px;
+      background: var(--text-light);
+      border-radius: 2px;
     }
-    header.hero::after {
-      content:"";position:absolute;inset:0;background:rgba(0,0,0,0.45);z-index:-1
+    
+    .whatsapp-icon {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      width: 45px;
+      height: 45px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1001;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
-    .hero-content {z-index:10}
-    .hero-content h1 {font-family:'Montserrat';font-size:3rem}
-    .btn {
-      background:var(--accent);color:white;
-      padding:12px 22px;border:none;border-radius:8px;
-      cursor:pointer;margin-top:12px
+    
+    .whatsapp-icon::after {
+      content: '💬';
+      font-size: 24px;
     }
-
-    /* OUR SPACE */
-    section.gallery {
-      padding:60px 20px;
-      background:var(--secondary-bg);
-      transition:background .3s;
-    }
-    section.gallery h2 {
-      text-align:center;
-      font-family:'Montserrat';
-      font-size:2.5rem;
-      margin-bottom:20px
-    }
-    .cards {
-      display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:20px;max-width:1200px;margin:0 auto
-    }
-    .card {
-      box-shadow:0 6px 18px rgba(0,0,0,0.1);
-      border-radius:12px;overflow:hidden
-    }
-    .card img {width:100%;height:240px;object-fit:cover;display:block}
-
-    /* THEME BUTTONS */
+    
+    /* Theme Switcher */
     .theme-switcher {
-      position:fixed;top:100px;right:20px;
-      display:flex;flex-direction:column;gap:10px;
-      z-index:200;
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      z-index: 999;
+      background: var(--bg-secondary);
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px var(--card-shadow);
     }
-    .theme-switcher button {
-      padding:8px 14px;
-      border:none;
-      border-radius:6px;
-      cursor:pointer;
-      font-weight:600;
+    
+    .theme-switcher h3 {
+      margin: 0 0 10px 0;
+      font-size: 0.85rem;
+      font-family: 'Montserrat';
+      color: var(--text-primary);
     }
-
-    /* FOOTER */
-    footer {
-      background:var(--footer-bg);
-      color:var(--footer-text);
-      text-align:center;padding:20px
+    
+    .theme-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .theme-btn {
+      padding: 6px 14px;
+      border: 2px solid var(--accent);
+      background: transparent;
+      color: var(--text-primary);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+    
+    .theme-btn:hover, .theme-btn.active {
+      background: var(--accent);
+      color: var(--text-light);
+    }
+    
+    /* Hero Section */
+    .hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .hero video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--bg-hero-overlay);
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      color: var(--text-light);
+      padding: 20px;
+    }
+    
+    .hero h1 {
+      font-family: 'Montserrat';
+      font-size: 4rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    
+    .hero h1 .italic {
+      font-style: italic;
+      font-weight: 400;
+    }
+    
+    .hero-subtitle {
+      background: var(--accent);
+      color: var(--text-light);
+      padding: 15px 40px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 20px;
+      display: inline-block;
+    }
+    
+    /* Content Sections */
+    section {
+      padding: 80px 40px;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .section-white {
+      background: var(--bg-secondary);
+    }
+    
+    .section-colored {
+      background: var(--accent);
+      color: var(--text-light);
+    }
+    
+    /* 01 Studio Section */
+    .studio-section {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      max-width: 1400px;
+      width: 100%;
+    }
+    
+    .studio-devices {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .device-mockup {
+      width: 300px;
+      height: 500px;
+      border: 8px solid #333;
+      border-radius: 40px;
+      background: white;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .studio-text {
+      flex: 1;
+    }
+    
+    .studio-text h2 {
+      font-family: 'Montserrat';
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    
+    .studio-text p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    
+    /* Agency Section */
+    .agency-section {
+      flex-direction: column;
+      text-align: center;
+      gap: 40px;
+    }
+    
+    .agency-image {
+      width: 100%;
+      max-width: 900px;
+      height: 400px;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+    
+    .agency-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .agency-text h2 {
+      font-family: 'Montserrat';
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin: 0;
+    }
+    
+    /* Carousel Section */
+    .carousel-section {
+      background: var(--bg-primary);
+      position: relative;
+      padding: 100px 40px;
+    }
+    
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      max-width: 1400px;
+      height: 600px;
+      margin: 0 auto;
+      perspective: 1000px;
+    }
+    
+    .carousel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .card {
+      position: absolute;
+      width: 350px;
+      height: 500px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px var(--card-shadow);
+      overflow: hidden;
+      cursor: pointer;
+      border: 8px solid white;
+    }
+    
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .card.position-0 {
+      transform: translateX(-280px) scale(0.75) rotateY(-12deg) rotateZ(-8deg);
+      z-index: 1;
+      opacity: 0.7;
+    }
+    
+    .card.position-1 {
+      transform: translateX(-200px) scale(0.85) rotateY(-8deg) rotateZ(-5deg);
+      z-index: 2;
+      opacity: 0.85;
+    }
+    
+    .card.position-2 {
+      transform: translateX(0) scale(1.2) rotateY(0deg) rotateZ(0deg);
+      z-index: 10;
+      opacity: 1;
+    }
+    
+    .card.position-3 {
+      transform: translateX(200px) scale(0.85) rotateY(8deg) rotateZ(5deg);
+      z-index: 2;
+      opacity: 0.85;
+    }
+    
+    .card.position-4 {
+      transform: translateX(280px) scale(0.75) rotateY(12deg) rotateZ(8deg);
+      z-index: 1;
+      opacity: 0.7;
+    }
+    
+    .card.hidden {
+      opacity: 0;
+      transform: translateX(-800px) scale(0.5);
+      z-index: 0;
+    }
+    
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.8);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      z-index: 100;
+    }
+    
+    .carousel-nav:hover {
+      background: white;
+    }
+    
+    .carousel-nav.prev { left: 20px; }
+    .carousel-nav.next { right: 20px; }
+    
+    /* Pricing Section */
+    .pricing-section {
+      background: var(--bg-primary);
+      padding: 100px 40px;
+    }
+    
+    .pricing-cards {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .pricing-card {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px var(--card-shadow);
+      width: 350px;
+      transform: perspective(1000px) rotateY(-5deg);
+    }
+    
+    .pricing-card:nth-child(2) {
+      transform: perspective(1000px) rotateY(0deg) scale(1.05);
+      z-index: 2;
+    }
+    
+    .pricing-card:nth-child(3) {
+      transform: perspective(1000px) rotateY(5deg);
+    }
+    
+    .pricing-card h3 {
+      color: var(--accent);
+      font-family: 'Montserrat';
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .pricing-card .price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    
+    .pricing-card .period {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    
+    .pricing-card ul {
+      list-style: none;
+      padding: 0;
+      text-align: left;
+    }
+    
+    .pricing-card li {
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    /* Gallery Section */
+    .gallery-section {
+      background: var(--bg-secondary);
+      padding: 100px 40px;
+    }
+    
+    .gallery-content {
+      max-width: 1400px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 60px;
+    }
+    
+    .gallery-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    
+    .gallery-grid img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 15px;
+    }
+    
+    .gallery-text {
+      flex: 1;
+    }
+    
+    .gallery-text h2 {
+      font-family: 'Montserrat';
+      font-size: 4rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    
+    /* Contact Section */
+    .contact-section {
+      background: var(--bg-secondary);
+      padding: 100px 40px;
+    }
+    
+    .contact-content {
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      gap: 80px;
+    }
+    
+    .contact-info {
+      flex: 1;
+    }
+    
+    .contact-info h2 {
+      font-family: 'Montserrat';
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    
+    .contact-info p {
+      margin-bottom: 30px;
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-icons a {
+      width: 45px;
+      height: 45px;
+      background: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      font-size: 20px;
+    }
+    
+    .contact-form {
+      flex: 1;
+    }
+    
+    .contact-form h2 {
+      font-family: 'Montserrat';
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: 'Open Sans';
+      font-size: 1rem;
+    }
+    
+    .form-group textarea {
+      height: 120px;
+      resize: vertical;
+    }
+    
+    .submit-btn {
+      background: var(--accent);
+      color: white;
+      padding: 12px 40px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
+    .submit-btn:hover {
+      background: var(--accent-dark);
+    }
+    
+    /* Footer Banner */
+    .footer-banner {
+      background: var(--accent);
+      color: var(--text-light);
+      padding: 30px;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; }
+      .studio-section, .gallery-content, .contact-content {
+        flex-direction: column;
+      }
+      .pricing-cards { flex-direction: column; align-items: center; }
+      .card.position-0, .card.position-4 { display: none; }
     }
   </style>
 </head>
-<body>
-
-  <!-- THEME SWITCHER -->
-  <div class="theme-switcher">
-    <button onclick="setTheme('greenblack')" style="background:#0f0;color:#111">Green+Black</button>
-    <button onclick="setTheme('blackred')" style="background:#111;color:#B22222">Black+Red</button>
-    <button onclick="setTheme('whitered')" style="background:white;color:#B22222">White+Red</button>
-    <button onclick="setTheme('final')" style="background:#B22222;color:white">Final Theme</button>
-  </div>
-
-  <!-- NAV -->
+<body class="theme-default">
+  <!-- Navigation -->
   <nav>
-    <div class="logo">socialpoint.</div>
-    <div>
-      <a href="#home">Home</a>
-      <a href="#space">Our Space</a>
-      <a href="#contact">Contact</a>
+    <div class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
+    <div class="logo">socialpoint.</div>
   </nav>
-
-  <!-- HERO -->
-  <header class="hero" id="home">
+  
+  <div class="whatsapp-icon"></div>
+  
+  <!-- Theme Switcher -->
+  <div class="theme-switcher">
+    <h3>Themes</h3>
+    <div class="theme-buttons">
+      <button class="theme-btn active" onclick="switchTheme('default')">Classic</button>
+      <button class="theme-btn" onclick="switchTheme('green-black')">Green Screen</button>
+      <button class="theme-btn" onclick="switchTheme('red-white')">Red White</button>
+      <button class="theme-btn" onclick="switchTheme('red-black')">Red Dark</button>
+    </div>
+  </div>
+  
+  <!-- Hero Section -->
+  <section class="hero">
     <video autoplay muted loop playsinline>
       <source src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\WhatsApp Video 2025-10-02 at 18.53.35_3b57b03d.mp4" type="video/mp4">
     </video>
     <div class="hero-content">
-      <h1>Immersive AR & Green-Screen Studio</h1>
-      <p>Professional green-screen, AR/VR, and virtual set production with top-notch equipment.</p>
-      <button class="btn">Book a Session</button>
-    </div>
-  </header>
-
-  <!-- OUR SPACE -->
-  <section class="gallery" id="space">
-    <h2>Our Space</h2>
-    <div class="cards">
-      <div class="card"><img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio Image 1"></div>
-      <div class="card"><img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio Image 2"></div>
-      <div class="card"><img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio Image 3"></div>
-      <div class="card"><img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio Image 4"></div>
-      <div class="card"><img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio Image 5"></div>
+      <h1>we make <span class="italic">content</span> for<br>the new <span class="italic">mainstream</span></h1>
+      <div class="hero-subtitle">content production and shooting center</div>
     </div>
   </section>
-
-  <!-- FOOTER -->
-  <footer>
-    © 2025 socialpoint. All rights reserved.
-  </footer>
-
+  
+  <!-- 01 Studio Section -->
+  <section class="section-white">
+    <div class="studio-section">
+      <div class="studio-devices">
+        <div class="device-mockup"></div>
+      </div>
+      <div class="studio-text">
+        <h2>01 Studio,<br>10 Different<br>Experiences</h2>
+        <p>Turn everything you dream into reality with SocialPoint. And better reflect your style with director support.</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Agency Section -->
+  <section class="section-colored">
+    <div class="agency-section">
+      <div class="agency-image">
+        <img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio">
+      </div>
+      <div class="agency-text">
+        <h2>An agency built<br>for the future.<br>from TV to Instagram</h2>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Carousel Section -->
+  <section class="carousel-section">
+    <div class="carousel-container">
+      <button class="carousel-nav prev" onclick="moveCarousel(-1)">←</button>
+      <div class="carousel" id="carousel"></div>
+      <button class="carousel-nav next" onclick="moveCarousel(1)">→</button>
+    </div>
+  </section>
+  
+  <!-- Pricing Section -->
+  <section class="pricing-section">
+    <div class="pricing-cards">
+      <div class="pricing-card">
+        <h3>STARTER PACK</h3>
+        <div class="price">₹2,500</div>
+        <div class="period">Per Hour (Excl. GST)</div>
+        <ul>
+          <li>AC Chroma / Green Screen Studio</li>
+          <li>Access to lighting rigs & gear</li>
+          <li>24×7 power backup & UPS</li>
+          <li>High-speed 300 Mbps internet</li>
+          <li>On-site technical support</li>
+        </ul>
+      </div>
+      
+      <div class="pricing-card">
+        <h3>PRO PACK</h3>
+        <div class="price">₹15,000</div>
+        <div class="period">Per Shift (Excl. GST)</div>
+        <ul>
+          <li>Pro Lighting, Camera & Grip Gear</li>
+          <li>Next-Gen Chroma & XR Studio</li>
+          <li>Basic Post-Production Assistance</li>
+          <li>300 Mbps High-Speed Internet</li>
+          <li>Smooth Load-in / Load-out Support</li>
+          <li>On-Site Technical Crew</li>
+        </ul>
+      </div>
+      
+      <div class="pricing-card">
+        <h3>CREATOR'S PACK</h3>
+        <div class="price">₹25,000</div>
+        <div class="period">Full Day (Excl. GST)</div>
+        <ul>
+          <li>Unlimited Full-Day Access to Chroma & XR Studio</li>
+          <li>Pro Lighting, Camera & Grip Gear</li>
+          <li>24×7 Power Backup + UPS</li>
+          <li>End-to-End Production Support</li>
+          <li>Priority Booking + Flexible Hours</li>
+          <li>Post-Production Services (Editing, VFX, Color)</li>
+          <li>Creative Direction & Consultation</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Gallery Section -->
+  <section class="gallery-section">
+    <div class="gallery-content">
+      <div class="gallery-grid">
+        <img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio 1">
+        <img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio 2">
+        <img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio 3">
+        <img src="C:\Users\sunid\OneDrive\Desktop\Website\socialpoint\PHOTO-2025-09-10-08-51-31.webp" alt="Studio 4">
+      </div>
+      <div class="gallery-text">
+        <h2>Our Space</h2>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Contact Section -->
+  <section class="contact-section">
+    <div class="contact-content">
+      <div class="contact-info">
+        <h2>socialpoint</h2>
+        <p><strong>Email</strong><br>socialpoint@.com</p>
+        <p><strong>Social</strong></p>
+        <div class="social-icons">
+          <a href="#">📷</a>
+          <a href="#">f</a>
+          <a href="#">𝕏</a>
+          <a href="#">in</a>
+          <a href="#">▶</a>
+          <a href="#">♪</a>
+        </div>
+      </div>
+      
+      <div class="contact-form">
+        <h2>Let's Chat</h2>
+        <form>
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" placeholder="Enter your name">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea placeholder="Your message"></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Send</button>
+        </form>
+      </div>
+    </div>
+  </section>
+  
+  <div class="footer-banner">socialpoint</div>
+  
   <script>
-    function setTheme(theme){
-      const root=document.documentElement;
-      if(theme==="greenblack"){
-        root.style.setProperty('--primary-bg','#0f0');
-        root.style.setProperty('--secondary-bg','#111');
-        root.style.setProperty('--accent','#111');
-        root.style.setProperty('--text','white');
-        root.style.setProperty('--nav-bg','#111');
-        root.style.setProperty('--footer-bg','#111');
-        root.style.setProperty('--footer-text','white');
-      }
-      else if(theme==="blackred"){
-        root.style.setProperty('--primary-bg','#111');
-        root.style.setProperty('--secondary-bg','#111');
-        root.style.setProperty('--accent','#B22222');
-        root.style.setProperty('--text','white');
-        root.style.setProperty('--nav-bg','#111');
-        root.style.setProperty('--footer-bg','#111');
-        root.style.setProperty('--footer-text','#B22222');
-      }
-      else if(theme==="whitered"){
-        root.style.setProperty('--primary-bg','#fff');
-        root.style.setProperty('--secondary-bg','#fff');
-        root.style.setProperty('--accent','#B22222');
-        root.style.setProperty('--text','#111');
-        root.style.setProperty('--nav-bg','#B22222');
-        root.style.setProperty('--footer-bg','#B22222');
-        root.style.setProperty('--footer-text','white');
-      }
-      else if(theme==="final"){
-        root.style.setProperty('--primary-bg','#F5F5F5');
-        root.style.setProperty('--secondary-bg','white');
-        root.style.setProperty('--accent','#B22222');
-        root.style.setProperty('--text','#111');
-        root.style.setProperty('--nav-bg','rgba(17,17,17,0.8)');
-        root.style.setProperty('--footer-bg','#111');
-        root.style.setProperty('--footer-text','white');
-      }
+    // Carousel
+    const images = [
+      'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=400',
+      'https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=400',
+      'https://images.unsplash.com/photo-1522770179533-24471fcdba45?w=400',
+      'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c?w=400',
+      'https://images.unsplash.com/photo-1533827432537-70133748f5c8?w=400',
+      'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=400'
+    ];
+    
+    let currentIndex = 2;
+    
+    function initCarousel() {
+      const carousel = document.getElementById('carousel');
+      carousel.innerHTML = '';
+      images.forEach((img, i) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<img src="${img}" alt="Image ${i + 1}">`;
+        card.onclick = () => {
+          const pos = getCardPosition(i);
+          if (pos === 3) moveCarousel(1);
+          else if (pos === 1) moveCarousel(-1);
+        };
+        carousel.appendChild(card);
+      });
+      updateCarousel();
     }
+    
+    function getCardPosition(cardIndex) {
+      let diff = cardIndex - currentIndex;
+      if (diff > images.length / 2) diff -= images.length;
+      if (diff < -images.length / 2) diff += images.length;
+      return diff + 2;
+    }
+    
+    function updateCarousel() {
+      const cards = document.querySelectorAll('.card');
+      cards.forEach((card, index) => {
+        const position = getCardPosition(index);
+        card.className = 'card';
+        if (position >= 0 && position <= 4) {
+          card.classList.add(`position-${position}`);
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+    
+    function moveCarousel(direction) {
+      currentIndex = (currentIndex + direction + images.length) % images.length;
+      updateCarousel();
+    }
+    
+    // Theme Switcher
+    function switchTheme(theme) {
+      document.body.className = 'theme-' + theme;
+      document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      localStorage.setItem('studioTheme', theme);
+    }
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      initCarousel();
+      const savedTheme = localStorage.getItem('studioTheme') || 'default';
+      if (savedTheme !== 'default') {
+        document.body.className = 'theme-' + savedTheme;
+      }
+    });
   </script>
 </body>
 </html>
